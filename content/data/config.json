@@ -38,6 +38,13 @@
                 "url": "/sign-up",
                 "altText": "Join us",
                 "style": "secondary"
+            },
+            {
+                "type": "Button",
+                "label": "Log In",
+                "url": "/log-in",
+                "altText": "Log in",
+                "style": "link"
             }
         ],
         "styles": {

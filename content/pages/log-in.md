@@ -1,5 +1,5 @@
 ---
-title: Sign Up
+title: Log In
 sections:
   - type: SignUpSection
 layout: PageLayout
