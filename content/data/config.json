@@ -34,15 +34,15 @@
         "secondaryLinks": [
             {
                 "type": "Button",
-                "label": "Sign Up",
-                "url": "/sign-up",
+                "label": "Sign up",
+                "url": "/register",
                 "altText": "Join us",
                 "style": "secondary"
             },
             {
                 "type": "Button",
-                "label": "Log In",
-                "url": "/log-in",
+                "label": "Log in",
+                "url": "/register",
                 "altText": "Log in",
                 "style": "link"
             }

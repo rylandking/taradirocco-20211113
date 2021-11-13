@@ -1,7 +1,0 @@
----
-title: Sign Up
-sections:
-  - type: SignUpSection
-layout: PageLayout
-_slug: oval-maple-439
----

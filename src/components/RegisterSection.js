@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
-export default function SignUpSection() {
-    const { currentUser } = useAuth();
+export default function Register() {
+    const { currentUser, register, login } = useAuth();
+    const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSigningUp, setIsSigningUp] = useState(true);
-
-    const { register, login } = useAuth();
 
     return (
         <>
@@ -18,8 +18,8 @@ export default function SignUpSection() {
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>
                             {/* <img className="h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" /> */}
-                            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">{isSigningUp ? `Sign Up` : `Log In`} to Tara Lynn Yoga</h2>
-                            <p className="mt-2 text-sm text-gray-600">{`Current user is ${currentUser}`}</p>
+                            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">{isSigningUp ? `Join` : `Log In to`} Tara Lynn Yoga</h2>
+                            <p className="mt-2 text-sm text-gray-600">{(`Current user is`, currentUser && JSON.stringify(currentUser.email))}</p>
                             {/* <p className="mt-2 text-sm text-gray-600">
                                 Or{' '}
                                 <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
@@ -100,13 +100,18 @@ export default function SignUpSection() {
                                         setIsSubmitting(true);
                                         if (isSigningUp === true) {
                                             register(email, password)
-                                                .then((response) => console.log(response))
+                                                .then((response) => {
+                                                    console.log(response);
+                                                    router.push('/register');
+                                                })
                                                 .catch((error) => alert(`Credentials not accepted: ` + error.message))
                                                 .finally(() => setIsSubmitting(false));
                                         } else {
-                                            alert('log in state true');
                                             login(email, password)
-                                                .then((response) => console.log(response))
+                                                .then((response) => {
+                                                    console.log(response);
+                                                    router.push('/register');
+                                                })
                                                 .catch((error) => alert(`Credentials not accepted: ` + error.message))
                                                 .finally(() => setIsSubmitting(false));
                                         }

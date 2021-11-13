@@ -1,0 +1,167 @@
+type: object
+name: Header
+label: Header
+labelField: title
+readOnly: true
+fieldGroups:
+  - name: styles
+    label: Styles
+  - name: settings
+    label: Settings
+fields:
+  - type: enum
+    name: headerVariant
+    group: styles
+    label: Header arrangement
+    options:
+      - label: Header with logo and primary links on the left
+        value: variant-a
+      - label: Header with logo on the left and primary links centered
+        value: variant-b
+      - label: Header with logo on the left and primary links on the right
+        value: variant-c
+      - label: Header with logo centered and primary links on the left
+        value: variant-d
+      - label: Header with logo centered and primary links centered
+        value: variant-e
+    default: variant-a
+  - type: enum
+    name: primaryColors
+    label: Primary colors
+    group: styles
+    controlType: palette
+    options:
+      - label: Colors A
+        value: colors-a
+        textColor: '$body'
+        backgroundColor: '#ffffff'
+        borderColor: '#ececec'
+      - label: Colors B
+        value: colors-b
+        textColor: '$primary'
+        backgroundColor: '#ffffff'
+        borderColor: '#ececec'
+      - label: Colors C
+        value: colors-c
+        textColor: '#ffffff'
+        backgroundColor: '$neutral'
+        borderColor: '#ececec'
+      - label: Colors D
+        value: colors-d
+        textColor: '$primary'
+        backgroundColor: '$neutral'
+        borderColor: '#ececec'
+      - label: Colors E
+        value: colors-e
+        textColor: '$body'
+        backgroundColor: '$primary'
+        borderColor: '#ececec'
+      - label: Colors F
+        value: colors-f
+        textColor: '$body'
+        backgroundColor: '$secondary'
+        borderColor: '#ececec'
+      - label: Colors G
+        value: colors-g
+        textColor: '$primary'
+        backgroundColor: '$secondary'
+        borderColor: '#ececec'
+      - label: Colors H
+        value: colors-h
+        textColor: '$body'
+        backgroundColor: '$complementary'
+        borderColor: '#ececec'
+      - label: Colors I
+        value: colors-i
+        textColor: '$body'
+        backgroundColor: '$complementaryAlt'
+        borderColor: '#ececec'
+    default: colors-a
+  - type: enum
+    name: secondaryColors
+    label: Secondary colors (mobile menu)
+    group: styles
+    controlType: palette
+    options:
+      - label: Colors A
+        value: colors-a
+        textColor: '$body'
+        backgroundColor: '#ffffff'
+        borderColor: '#ececec'
+      - label: Colors B
+        value: colors-b
+        textColor: '$primary'
+        backgroundColor: '#ffffff'
+        borderColor: '#ececec'
+      - label: Colors C
+        value: colors-c
+        textColor: '#ffffff'
+        backgroundColor: '$neutral'
+        borderColor: '#ececec'
+      - label: Colors D
+        value: colors-d
+        textColor: '$primary'
+        backgroundColor: '$neutral'
+        borderColor: '#ececec'
+      - label: Colors E
+        value: colors-e
+        textColor: '$body'
+        backgroundColor: '$primary'
+        borderColor: '#ececec'
+      - label: Colors F
+        value: colors-f
+        textColor: '$body'
+        backgroundColor: '$secondary'
+        borderColor: '#ececec'
+      - label: Colors G
+        value: colors-g
+        textColor: '$primary'
+        backgroundColor: '$secondary'
+        borderColor: '#ececec'
+      - label: Colors H
+        value: colors-h
+        textColor: '$body'
+        backgroundColor: '$complementary'
+        borderColor: '#ececec'
+      - label: Colors I
+        value: colors-i
+        textColor: '$body'
+        backgroundColor: '$complementaryAlt'
+        borderColor: '#ececec'
+    default: colors-a
+  - type: string
+    name: title
+    label: Title
+  - type: boolean
+    name: isTitleVisible
+    label: Display title
+  - type: model
+    name: logo
+    label: Logo
+    models: [ImageBlock]
+  - type: list
+    name: primaryLinks
+    label: Primary navigation links
+    items:
+      type: model
+      models:
+        - Button
+        - Link
+  - type: list
+    name: secondaryLinks
+    label: Secondary links
+    items:
+      type: model
+      models:
+        - Button
+        - Link
+  - type: style
+    name: styles
+    styles:
+      self:
+        width: ['narrow', 'wide', 'full']
+        padding: ['tw4:36']
+    default:
+      self:
+        width: narrow
+        padding: ['pt-5', 'pb-5', 'pl-4', 'pr-4']
