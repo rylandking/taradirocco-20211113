@@ -7,7 +7,9 @@ import ImageBlock from '@stackbit/components/dist/components/ImageBlock';
 import Link from '@stackbit/components/dist/utils/link';
 import CloseIcon from '@stackbit/components/dist/svgs/close';
 import HamburgerIcon from '@stackbit/components/dist/svgs/hamburger';
-import NavAuthLink from './NavAuthLink';
+import ProfileLink from './ProfileLink';
+
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Header(props) {
     const primaryColors = props.primaryColors || 'colors-a';
@@ -60,7 +62,9 @@ function headerVariantA(props) {
                     {listOfLinks(secondaryLinks)}
                 </ul>
             )}
-            <NavAuthLink />
+            <span className="hidden lg:flex">
+                <ProfileLink />
+            </span>
             {(primaryLinks.length > 0 || secondaryLinks.length > 0) && <MobileMenu {...props} />}
         </div>
     );
@@ -85,7 +89,9 @@ function headerVariantB(props) {
                     {listOfLinks(secondaryLinks)}
                 </ul>
             )}
-            <NavAuthLink />
+            <span className="hidden lg:flex">
+                <ProfileLink />
+            </span>
             {(primaryLinks.length > 0 || secondaryLinks.length > 0) && <MobileMenu {...props} />}
         </div>
     );
@@ -110,7 +116,9 @@ function headerVariantC(props) {
                     {listOfLinks(secondaryLinks)}
                 </ul>
             )}
-            <NavAuthLink />
+            <span className="hidden lg:flex">
+                <ProfileLink />
+            </span>
             {(primaryLinks.length > 0 || secondaryLinks.length > 0) && <MobileMenu {...props} />}
         </div>
     );
@@ -136,7 +144,9 @@ function headerVariantD(props) {
                     {listOfLinks(secondaryLinks)}
                 </ul>
             )}
-            <NavAuthLink />
+            <span className="hidden lg:flex">
+                <ProfileLink />
+            </span>
             {(primaryLinks.length > 0 || secondaryLinks.length > 0) && <MobileMenu {...props} />}
         </div>
     );
@@ -165,7 +175,9 @@ function headerVariantE(props) {
                     {listOfLinks(primaryLinks)}
                 </ul>
             )}
-            <NavAuthLink />
+            <span className="hidden lg:flex">
+                <ProfileLink />
+            </span>
         </>
     );
 }
@@ -201,6 +213,9 @@ function MobileMenu(props) {
                                 {listOfLinks(secondaryLinks, true)}
                             </ul>
                         )}
+                        <div className="">
+                            <ProfileLink />
+                        </div>
                     </div>
                 </div>
             )}
@@ -219,6 +234,15 @@ function siteLogoLink(props) {
 
 function listOfLinks(links, inMobileMenu = false) {
     const Action = getComponent('Action');
+    const { currentUser } = useAuth();
+    // If current user remove "Join In" button in nav to /register
+    {
+        currentUser &&
+            (links = links.filter(function (obj) {
+                return obj.url !== '/register';
+            }));
+    }
+
     return links.map((link, index) => {
         const defaultStyle = link.type === 'Link' ? 'link' : 'secondary';
         const style = link.style || defaultStyle;
