@@ -35,7 +35,7 @@
             {
                 "type": "Button",
                 "label": "Sign Up",
-                "url": "/",
+                "url": "/sign-up",
                 "altText": "Join us",
                 "style": "secondary"
             }
