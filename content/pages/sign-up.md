@@ -1,6 +1,7 @@
 ---
 title: Sign Up
 sections:
+  - type: SignUpSection
   - type: HeroSection
     title: All about the art of selling fish
     subtitle: Fresh. Better. Faster

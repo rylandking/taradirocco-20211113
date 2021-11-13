@@ -1,10 +1,12 @@
 import dynamic from 'next/dynamic';
 import { registerComponents } from '@stackbit/components';
 import { componentsMap } from '@stackbit/components/dist/components-map';
+import SignUpSection from './SignUpSection';
 
 registerComponents({
     // Register all Stackbit components
-    ...componentsMap
+    ...componentsMap,
+    SignUpSection: SignUpSection
 
     // Override any static or dynamic component,
     // or register your own dynamic component.
@@ -17,7 +19,7 @@ registerComponents({
  * The `registerComponents` function registers the received components with the components registry. To retrieve a
  * registered component, use the `getComponent(key)` function. The `@stackbit/components` package uses the
  * `getComponent` function to retrieve and render registered components. The component registry allows you to override
- * and customize any of the `@stackbit/components` package's internal components by registering different components
+ * and customize any of the `@stackbit/components` package'sUpternal components by registering different components
  * under the same key.
  *
  * There are two groups of components you can register - "static" and "dynamic".
