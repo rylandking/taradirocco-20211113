@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../utils/init-firebase';
 
 export default function Register() {
     const { currentUser, register, login, logInWithGoogle, logout } = useAuth();
@@ -9,6 +11,21 @@ export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSigningUp, setIsSigningUp] = useState(true);
+
+    useEffect(() => {});
+
+    const recordNewUser = async (user) => {
+        // Tutorial https://www.youtube.com/watch?v=YpuyxBfYRT8&ab_channel=Logicism
+        const docRef = doc(db, 'users', user.user.uid);
+        const payload = {
+            uid: user.user.uid,
+            email: user.user.email,
+            displayName: user.user.displayName,
+            providerId: user.user.providerData[0].providerId,
+            photoURL: user.user.photoURL
+        };
+        await setDoc(docRef, payload);
+    };
 
     return (
         <>
@@ -35,6 +52,10 @@ export default function Register() {
                                                         logInWithGoogle()
                                                             .then((user) => {
                                                                 console.log(user);
+                                                                // Add user to firestore
+                                                                //// DO IT HERE
+                                                                recordNewUser(user);
+                                                                ////
                                                                 router.push('/register');
                                                             })
                                                             .catch((error) => console.log(error));
