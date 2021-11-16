@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, addDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../utils/init-firebase';
+import getStripe from '../../stripe/initializeStripe.ts';
+import usePremiumStatus from '../../stripe/usePremiumStatus';
 
 export default function Register() {
-    const { currentUser, register, login, logInWithGoogle, logout } = useAuth();
+    const { currentUser, register, login, logInWithGoogle, logInWithTwitter, logout } = useAuth();
     const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const [isSigningUp, setIsSigningUp] = useState(true);
 
-    useEffect(() => {});
+    const userIsPremium = usePremiumStatus(currentUser);
 
     const recordNewUser = async (user) => {
         // Tutorial https://www.youtube.com/watch?v=YpuyxBfYRT8&ab_channel=Logicism
@@ -25,6 +28,34 @@ export default function Register() {
             photoURL: user.user.photoURL
         };
         await setDoc(docRef, payload);
+    };
+
+    const createCheckoutSession2 = async () => {
+        // Create a new checkout session in the subcollection inside this users document
+        const collectionRef = collection(db, 'users', currentUser.uid, 'checkout_sessions');
+        const payload = {
+            price: 'price_1JvjWLChfN4TVWbYw2LdDXZZ',
+            success_url: 'http://localhost:3000/register/',
+            cancel_url: window.location.origin
+        };
+        await addDoc(collectionRef, payload);
+
+        // Get document from collectionRef
+        const docRef = await addDoc(collectionRef, payload);
+
+        const docSnap = onSnapshot(docRef, (doc) => {
+            // Get sessionId from newly created document inside user's checkout_sessions collection
+            const { sessionId } = doc.data();
+
+            const directToStripe = async () => {
+                if (sessionId) {
+                    // If sessionId is returned from Stripe, redirect to Stripe Checkout
+                    const stripe = await getStripe();
+                    stripe.redirectToCheckout({ sessionId });
+                }
+            };
+            directToStripe(sessionId);
+        });
     };
 
     return (
@@ -52,10 +83,8 @@ export default function Register() {
                                                         logInWithGoogle()
                                                             .then((user) => {
                                                                 console.log(user);
-                                                                // Add user to firestore
-                                                                //// DO IT HERE
+                                                                // Record new user to Firestore
                                                                 recordNewUser(user);
-                                                                ////
                                                                 router.push('/register');
                                                             })
                                                             .catch((error) => console.log(error));
@@ -93,8 +122,17 @@ export default function Register() {
                                             </div>
                                             <div>
                                                 <a
-                                                    href="#"
                                                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer"
+                                                    onClick={() => {
+                                                        logInWithTwitter()
+                                                            .then((user) => {
+                                                                console.log(user);
+                                                                // Record new user to Firestore
+                                                                recordNewUser(user);
+                                                                router.push('/register');
+                                                            })
+                                                            .catch((error) => console.log(error));
+                                                    }}
                                                 >
                                                     <span className="sr-only">Sign in with Twitter</span>
                                                     <svg className="w-5 h-5" aria-hidden="true" fill="#0EA5E9" viewBox="0 0 20 20">
@@ -213,7 +251,16 @@ export default function Register() {
                                         </div>
                                     </form>
                                 ) : (
-                                    <div>
+                                    <div className="block">
+                                        <button
+                                            type="button"
+                                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 cursor-pointer"
+                                            onClick={(user) => {
+                                                createCheckoutSession2(currentUser.uid);
+                                            }}
+                                        >
+                                            Monthly Subscription Test - $39/mo
+                                        </button>
                                         <button
                                             type="button"
                                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
@@ -226,6 +273,7 @@ export default function Register() {
                                         </button>
                                     </div>
                                 )}
+                                {userIsPremium && <p>Confirmed! User is Premium</p>}
                             </div>
                         </div>
                     </div>

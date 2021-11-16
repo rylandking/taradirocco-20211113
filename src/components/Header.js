@@ -204,16 +204,16 @@ function MobileMenu(props) {
                             </button>
                         </div>
                         {primaryLinks.length > 0 && (
-                            <ul className="flex-grow mb-10 space-y-6" data-sb-field-path=".primaryLinks">
+                            <ul className="flex-grow mb-10 space-y-6" data-sb-field-path=".primaryLinks" onClick={() => setIsMenuOpen(false)}>
                                 {listOfLinks(primaryLinks, true)}
                             </ul>
                         )}
                         {secondaryLinks.length > 0 && (
-                            <ul className="mb-10 space-y-5" data-sb-field-path=".secondaryLinks">
+                            <ul className="mb-10 space-y-5" data-sb-field-path=".secondaryLinks" onClick={() => setIsMenuOpen(false)}>
                                 {listOfLinks(secondaryLinks, true)}
                             </ul>
                         )}
-                        <div className="">
+                        <div onClick={() => setIsMenuOpen(false)}>
                             <ProfileLink />
                         </div>
                     </div>
@@ -246,6 +246,7 @@ function listOfLinks(links, inMobileMenu = false) {
     return links.map((link, index) => {
         const defaultStyle = link.type === 'Link' ? 'link' : 'secondary';
         const style = link.style || defaultStyle;
+
         return (
             <li key={index} data-sb-field-path={`.${index}`}>
                 <Action {...link} className={classNames(inMobileMenu && style !== 'link' ? 'w-full' : '')} />

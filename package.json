@@ -13,6 +13,7 @@
     "dependencies": {
         "@stackbit/cli": "^0.1.14",
         "@stackbit/components": "^0.1.49",
+        "@stripe/stripe-js": "^1.21.1",
         "axios": "^0.18.0",
         "classnames": "^2.3.1",
         "firebase": "^9.4.1",

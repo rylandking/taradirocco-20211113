@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../utils/init-firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    GoogleAuthProvider,
+    TwitterAuthProvider,
+    signInWithPopup
+} from 'firebase/auth';
 
 // Tutorial: https://www.youtube.com/watch?v=MsDjbWUn3IE&ab_channel=yoursTRULY
 
@@ -9,6 +17,7 @@ const AuthContext = createContext({
     register: () => Promise,
     login: () => Promise,
     logInWithGoogle: () => Promise,
+    logInWithTwitter: () => Promise,
     logout: () => Promise
 });
 
@@ -36,6 +45,13 @@ export default function AuthContextProvider({ children }) {
 
     function logInWithGoogle() {
         const provider = new GoogleAuthProvider();
+        // firebase.auth().useDeviceLanguage();
+        return signInWithPopup(auth, provider);
+    }
+
+    function logInWithTwitter() {
+        const provider = new TwitterAuthProvider();
+        // firebase.auth().useDeviceLanguage();
         return signInWithPopup(auth, provider);
     }
 
@@ -48,6 +64,7 @@ export default function AuthContextProvider({ children }) {
         register,
         login,
         logInWithGoogle,
+        logInWithTwitter,
         logout
     };
 
